@@ -6,6 +6,7 @@ import { TransactionsController } from './transactions/transactions.controller';
 import { TransactionsService } from './transactions/transactions.service';
 import { TransactionsModule } from './transactions/transactions.module';
 import { HttpModule } from '@nestjs/axios';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { HttpModule } from '@nestjs/axios';
       isGlobal: true,
     }),
     TransactionsModule,
-    HttpModule
+    HttpModule,
+    CacheModule.register()
   ],
   controllers: [AppController, TransactionsController],
   providers: [AppService, TransactionsService],

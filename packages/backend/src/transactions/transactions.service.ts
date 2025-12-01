@@ -1,13 +1,16 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PaginationDto, TransactionSummary } from './transactions.dto';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { PaginationDto, TransactionReceiptResult, TransactionSummary } from './transactions.dto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { TRANSACTION_CATEGORIES } from 'src/configs/constants';
+import { CACHE_TRANSACTION_RECEIPTS_TIME, TRANSACTION_CATEGORIES } from 'src/configs/constants';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class TransactionsService {
     constructor(
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) {}
 
     async fetch_user_transactions(
@@ -65,6 +68,13 @@ export class TransactionsService {
     }
     
     async fetch_transaction_data(transaction_hash: string) {
+
+        const cached_transaction_receipt = await this.cacheManager.get(transaction_hash);
+        if (cached_transaction_receipt) {
+            console.log("Returning transaction receipt from cache");
+            return cached_transaction_receipt;
+        }
+
         const alchemy_api = `${process.env.ALCHEMY_BASE_URL}/${process.env.ALCHEMY_API_KEY}`;
 
         const transaction_receipt_payload = {
@@ -77,7 +87,9 @@ export class TransactionsService {
         try {
             const response = this.httpService.post(alchemy_api, transaction_receipt_payload);
             let {data} = await firstValueFrom(response);
-            return data;
+            const result: TransactionReceiptResult = data.result;
+            await this.cacheManager.set(transaction_hash, result, CACHE_TRANSACTION_RECEIPTS_TIME);
+            return result;
         } catch (error) {
             throw new HttpException(
                 {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { BACKEND_BASE_URL } from '../constants';
-import { GetTransactionsParams, TransactionReceipt, TransactionResponse } from '../interfaces';
+import { GetTransactionsParams, TransactionReceiptResult, TransactionResponse } from '../interfaces';
 
 export async function getTransactions(
     address: string,
@@ -18,9 +18,10 @@ export async function getTransactions(
     return res.data;
 }
 
-export async function getTransactionReceipt(transaction_hash: string): Promise<TransactionReceipt> {
-    const res = await axios.get<TransactionReceipt>(
+export async function getTransactionReceipt(transaction_hash: string): Promise<TransactionReceiptResult> {
+    const res = await axios.get<TransactionReceiptResult>(
         `${BACKEND_BASE_URL}/transaction/info/${transaction_hash}`
     );
+    console.log("res", res);
     return res.data;
 }

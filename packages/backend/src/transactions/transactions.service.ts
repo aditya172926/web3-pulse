@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TransactionSummary } from './transactions.dto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { TRANSACTION_CATEGORIES } from 'src/configs/constants';
 
 @Injectable()
 export class TransactionsService {
@@ -10,8 +11,8 @@ export class TransactionsService {
     ) {}
 
     async fetch_user_transactions(address: string) {
-        console.log("address ", address);
-        const alchemy_api = process.env.ALCHEMY_URL;
+        const alchemy_api = `${process.env.ALCHEMY_BASE_URL}/${process.env.ALCHEMY_API_KEY}`;
+
         const base_payload = {
                 jsonrpc: "2.0",
                 method: "alchemy_getAssetTransfers",
@@ -22,43 +23,29 @@ export class TransactionsService {
             params: {
                 toAddress: address,
                 excludeZeroValue: false,
-                category: [
-                    "external",
-                    "internal",
-                    "erc20",
-                    "erc721",
-                    "erc1155"
-                ],
+                category: TRANSACTION_CATEGORIES,
                 contractAddresses: [],
                 withMetadata: true
             },
             ...base_payload
-        }
+        };
 
         const outbound_payload = {
             id: 2,
             params: {
                 fromAddress: address,
                 excludeZeroValue: false,
-                category: [
-                    "external",
-                    "internal",
-                    "erc20",
-                    "erc721",
-                    "erc1155"
-                ],
+                category: TRANSACTION_CATEGORIES,
                 contractAddresses: [],
                 withMetadata: true
             },
             ...base_payload
-        }
+        };
 
         const batch_payload = [
             inbound_payload,
             outbound_payload
-        ]
-
-        console.log("batch payload, ", batch_payload);
+        ];
 
         const response = this.httpService.post(alchemy_api, batch_payload);
         const {data} = await firstValueFrom(response);
@@ -66,7 +53,6 @@ export class TransactionsService {
         const outgoing_transactions = data[1]?.result.transfers ?? [];
 
         const all_transactions = [...incoming_transactions, ...outgoing_transactions];
-
         return all_transactions;
     }
 }

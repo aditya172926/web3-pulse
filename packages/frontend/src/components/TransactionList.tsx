@@ -30,7 +30,7 @@ export default function TransactionList({ address, txnDirection }: Props) {
       setTransactions(prev => [...(reset ? [] : prev), ...res.transactions]);
       setPageKey(res.pageKey);
     } catch (err: any) {
-      setError('Failed to fetch transactions');
+      setError(err?.response.data.message || 'Failed to fetch transactions');
     } finally {
       setLoading(false);
     }
@@ -60,26 +60,33 @@ export default function TransactionList({ address, txnDirection }: Props) {
 
   return (
     <div>
+      {error && (
+        <div className="my-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded">
+          {error}
+        </div>
+      )}
+
       {loading && (
         <div className="flex flex-col items-center justify-center py-10">
           <div className="w-8 h-8 border-4 border-gray-300 border-t-indigo-600 rounded-full animate-spin"></div>
           <p className="mt-3 text-sm text-gray-600">Loading transactions...</p>
         </div>
       )}
-      {error && <p className="text-red-500">{error}</p>}
       {!loading && transactions.length === 0 && <p>No transactions found.</p>}
 
       {transactions.map(tx => (
         <TransactionCard key={tx.transaction_hash} tx={tx} type={txnDirection === 0 ? 'inbound' : 'outbound'} onClick={openModal} />
       ))}
 
-      <button
-        disabled={!pageKey || loading}
-        onClick={() => fetchData(false)} // `false` = append
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        {loading ? "Loading..." : "Load More"}
-      </button>
+      <div className="flex flex-col items-center justify-center py-10">
+        <button
+          disabled={!pageKey || loading}
+          onClick={() => fetchData(false)} // `false` = append
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          {loading ? "Loading..." : "Load More"}
+        </button>
+      </div>
 
       <TransactionDetailsModal
         open={modalOpen}

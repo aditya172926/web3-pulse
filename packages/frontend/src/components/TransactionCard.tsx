@@ -1,20 +1,20 @@
-import { Transaction } from '../services/transactions';
-import { format } from 'date-fns';
+import { Transaction } from '../interfaces';
 
 interface Props {
   tx: Transaction;
   type: 'inbound' | 'outbound';
+  onClick: (transaction: Transaction) => {}
 }
 
-export default function TransactionCard({ tx, type }: Props) {
+export default function TransactionCard({ tx, type, onClick }: Props) {
   return (
-    <div className="p-4 border rounded mb-2 bg-white shadow-sm">
+    <div className="p-4 border rounded mb-2 bg-white shadow-sm" onClick={() => onClick(tx)}>
       <div className="flex justify-between">
         <div>
           <span className="font-semibold">{type === 'inbound' ? 'Received' : 'Sent'}</span> {tx.asset || 'ETH'} {tx.value}
         </div>
         <div className="text-sm text-gray-500">
-          {tx.metadata.blockTimestamp ? format(new Date(tx.metadata.blockTimestamp), 'dd MMM yyyy HH:mm') : 'N/A'}
+          {tx.metadata.blockTimestamp ? tx.metadata.blockTimestamp : 'N/A'}
         </div>
       </div>
       <div className="text-xs text-gray-400 mt-1">

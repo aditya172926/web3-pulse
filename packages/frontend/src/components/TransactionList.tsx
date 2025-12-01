@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getTransactionReceipt, getTransactions } from '../services/transactions';
 import TransactionCard from './TransactionCard';
 import { TransactionDetailsModal } from './TransactionDetailsModal';
-import { Transaction, TransactionReceipt } from '../interfaces';
+import { Transaction, TransactionReceiptResult } from '../interfaces';
 
 interface Props {
   address: string;
@@ -14,7 +14,7 @@ export default function TransactionList({ address, txnDirection }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(null);
-  const [receipt, setReceipt] = useState<TransactionReceipt | null>(null);
+  const [receipt, setReceipt] = useState<TransactionReceiptResult | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [pageKey, setPageKey] = useState<string | null>('0x0');
 
@@ -48,7 +48,7 @@ export default function TransactionList({ address, txnDirection }: Props) {
     setModalOpen(true);
 
     // Fetch receipt
-    const data = await getTransactionReceipt(txn.hash);
+    const data = await getTransactionReceipt(txn.transaction_hash);
     setReceipt(data);
   };
 
@@ -70,7 +70,7 @@ export default function TransactionList({ address, txnDirection }: Props) {
       {!loading && transactions.length === 0 && <p>No transactions found.</p>}
 
       {transactions.map(tx => (
-        <TransactionCard key={tx.hash} tx={tx} type={txnDirection === 0 ? 'inbound' : 'outbound'} onClick={openModal} />
+        <TransactionCard key={tx.transaction_hash} tx={tx} type={txnDirection === 0 ? 'inbound' : 'outbound'} onClick={openModal} />
       ))}
 
       <button

@@ -24,4 +24,9 @@ export class TransactionsController {
     async fetch_transaction_data(@Param('transaction_hash', TransactionHashPipe) transaction_hash: string) {
         return await this.transactionService.fetch_transaction_data(transaction_hash);
     }
+
+    @Get('balances/:address')
+    async fetch_balances(@Param('address', EvmaddressPipe) address: string) {
+        
+    }
 }

@@ -22,7 +22,7 @@ interface Props {
             <span className="ml-1 font-medium">{tx.value} {tx.asset || 'ETH'}</span>
           </div>
           <div className="text-sm text-gray-500">
-            {tx.metadata.blockTimestamp || 'N/A'}
+            {tx.block_timestamp || 'N/A'}
           </div>
         </div>
   
@@ -31,7 +31,7 @@ interface Props {
         </div>
   
         <div className="text-sm text-gray-600 mt-1 break-all">
-          Hash: {tx.hash}
+          Hash: {tx.transaction_hash}
         </div>
         <div className="text-sm text-gray-600 break-all">
           From: {tx.from} → To: {tx.to}

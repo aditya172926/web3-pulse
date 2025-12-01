@@ -1,13 +1,17 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PaginationDto, TransactionSummary } from './transactions.dto';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { PaginationDto, TransactionData, TransactionHistoryResult, TransactionReceiptResult } from './transactions.dto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { TRANSACTION_CATEGORIES } from 'src/configs/constants';
+import { CACHE_TRANSACTION_RECEIPTS_TIME, TRANSACTION_CATEGORIES } from 'src/configs/constants';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { TransactionDirection } from 'src/configs/enums';
 
 @Injectable()
 export class TransactionsService {
     constructor(
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) {}
 
     async fetch_user_transactions(
@@ -37,7 +41,7 @@ export class TransactionsService {
             ...base_payload
         };
 
-        if (transaction_direction == 0) {
+        if (transaction_direction == TransactionDirection.INBOUND) {
             // inbound transactions
             payload.params['toAddress'] = address;
         } else {
@@ -48,10 +52,28 @@ export class TransactionsService {
         try {
             const response = this.httpService.post(alchemy_api, payload);
             const {data} = await firstValueFrom(response);
-            const transactions = data?.result.transfers ?? [];
-            const pageKey = data?.result.pageKey;
+            let raw_transactions = data?.result.transfers ?? [];
 
-            return {transactions, pageKey};
+            const transactions: TransactionData[] = raw_transactions.map((tx) => ({
+                from: tx.from,
+                to: tx.to,
+                value: tx.value.toString(),
+                transaction_hash: tx.hash,
+                block_number: tx.blockNum,
+                block_timestamp: tx.metadata?.blockTimestamp,
+                category: tx.category,
+                asset: tx.asset,
+                erc721_token_id: tx.erc721TokenId,
+                erc1155_metadata: tx.erc1155Metadata,
+                token_id: tx.tokenId,
+            }));
+
+            const pageKey = data?.result.pageKey;
+            const txn_result: TransactionHistoryResult = {
+                transactions,
+                pageKey
+            }
+            return txn_result;
         } catch (error) {
             throw new HttpException(
                 {
@@ -65,6 +87,13 @@ export class TransactionsService {
     }
     
     async fetch_transaction_data(transaction_hash: string) {
+
+        const cached_transaction_receipt = await this.cacheManager.get(transaction_hash);
+        if (cached_transaction_receipt) {
+            console.log("Returning transaction receipt from cache");
+            return cached_transaction_receipt;
+        }
+
         const alchemy_api = `${process.env.ALCHEMY_BASE_URL}/${process.env.ALCHEMY_API_KEY}`;
 
         const transaction_receipt_payload = {
@@ -77,7 +106,9 @@ export class TransactionsService {
         try {
             const response = this.httpService.post(alchemy_api, transaction_receipt_payload);
             let {data} = await firstValueFrom(response);
-            return data;
+            const result: TransactionReceiptResult = data.result;
+            await this.cacheManager.set(transaction_hash, result, CACHE_TRANSACTION_RECEIPTS_TIME);
+            return result;
         } catch (error) {
             throw new HttpException(
                 {

@@ -1,4 +1,4 @@
-import { Transaction, TransactionReceipt } from "../interfaces";
+import { Transaction, TransactionReceiptResult } from "../interfaces";
 
 export function TransactionDetailsModal({
     open,
@@ -8,7 +8,7 @@ export function TransactionDetailsModal({
     open: boolean;
     onClose: () => void;
     txn_data: Transaction | null,
-    receipt: TransactionReceipt | null;
+    receipt: TransactionReceiptResult | null;
 }) {
     return (
         <div
@@ -27,14 +27,14 @@ export function TransactionDetailsModal({
                     <p className="text-gray-500">Loading...</p>
                 ) : (
                     <div className="space-y-2 text-sm text-gray-700">
-                        <p><strong>Hash:</strong> {receipt.result.transactionHash}</p>
-                        <p><strong>Status:</strong> {receipt.result.status === "0x1" ? "Success" : "Failed"}</p>
-                        <p><strong>Block:</strong> {parseInt(receipt.result.blockNumber, 16)}</p>
-                        <p><strong>From:</strong> {receipt.result.from}</p>
-                        <p><strong>To:</strong> {receipt.result.to}</p>
-                        <p><strong>Gas Used:</strong> {parseInt(receipt.result.gasUsed, 16)}</p>
-                        <p><strong>Gas Price:</strong> {parseInt(receipt.result.effectiveGasPrice, 16)} wei</p>
-                        <p><strong>Cumulative Gas Used:</strong> {parseInt(receipt.result.cumulativeGasUsed, 16)}</p>
+                        <p><strong>Hash:</strong> {receipt.transactionHash}</p>
+                        <p><strong>Status:</strong> {receipt.status === "0x1" ? "Success" : "Failed"}</p>
+                        <p><strong>Block:</strong> {parseInt(receipt.blockNumber, 16)}</p>
+                        <p><strong>From:</strong> {receipt.from}</p>
+                        <p><strong>To:</strong> {receipt.to}</p>
+                        <p><strong>Gas Used:</strong> {parseInt(receipt.gasUsed, 16)}</p>
+                        <p><strong>Gas Price:</strong> {parseInt(receipt.effectiveGasPrice, 16)} wei</p>
+                        <p><strong>Cumulative Gas Used:</strong> {parseInt(receipt.cumulativeGasUsed, 16)}</p>
                     </div>
                 )}
 

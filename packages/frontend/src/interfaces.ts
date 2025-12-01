@@ -9,20 +9,17 @@ export interface TransactionMetadata {
 }
 
 export interface Transaction {
-    blockNum: string;           // hex
-    blockNumberDecimal: number; // added for sorting
-    uniqueId: string;
-    hash: string;
     from: string;
     to: string;
-    value: number;
-    erc721TokenId: string | null;
-    erc1155Metadata: any | null;
-    tokenId: string | null;
-    asset: string | null;
+    value: string;
+    transaction_hash: string;
+    block_number: string;
+    block_timestamp: string;
     category: string;
-    rawContract: RawContract;
-    metadata: TransactionMetadata;
+    asset: string;
+    erc721_token_id?: string;
+    erc1155_metadata?: string;
+    token_id?: string;
 }
 
 

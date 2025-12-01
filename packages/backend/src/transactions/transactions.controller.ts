@@ -1,6 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { EvmaddressPipe } from 'src/pipes/evmaddress/evmaddress.pipe';
+import { TransactionHashPipe } from 'src/pipes/transaction_hash/transaction_hash.pipe';
 
 @Controller('transaction')
 export class TransactionsController {
@@ -15,8 +16,7 @@ export class TransactionsController {
     }
 
     @Get('info/:transaction_hash')
-    async fetch_transaction_data(@Param() params: any) {
-        const transaction_hash = params.transaction_hash;
+    async fetch_transaction_data(@Param('transaction_hash', TransactionHashPipe) transaction_hash: string) {
         return await this.transactionService.fetch_transaction_data(transaction_hash);
     }
 }

@@ -23,7 +23,7 @@ export class PaginationDto {
     @Type(() => Number)
     @IsInt()
     @Min(1)
-    pageKey: number = 1;
+    pageKey: string = '0x0';
 
     @IsOptional()
     @Type(() => Number)

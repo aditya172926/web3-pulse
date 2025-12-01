@@ -32,7 +32,7 @@ export class TransactionsService {
                 withMetadata: true,
                 order: 'desc',
                 maxCount: `0x${limit.toString(16)}`,
-                pageKey: `0x${pageKey.toString(16)}`
+                pageKey: pageKey
             },
             ...base_payload
         };
@@ -49,8 +49,9 @@ export class TransactionsService {
             const response = this.httpService.post(alchemy_api, payload);
             const {data} = await firstValueFrom(response);
             const transactions = data?.result.transfers ?? [];
+            const pageKey = data?.result.pageKey;
 
-            return transactions;
+            return {transactions, pageKey};
         } catch (error) {
             throw new HttpException(
                 {

@@ -27,12 +27,9 @@ export default function TransactionList({ address, txnDirection }: Props) {
     let nextPageKey = reset ? '0x0' : pageKey;
     try {
       const res = await getTransactions(address, { txnDirection, limit: 5, pageKey: nextPageKey });
-      console.log(res);
       setTransactions(prev => [...(reset ? [] : prev), ...res.transactions]);
-      console.log("page key ", pageKey);
       setPageKey(res.pageKey);
     } catch (err: any) {
-      console.error(err);
       setError('Failed to fetch transactions');
     } finally {
       setLoading(false);

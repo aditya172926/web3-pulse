@@ -19,7 +19,6 @@ export async function getTransactions(
 }
 
 export async function getTransactionReceipt(transaction_hash: string): Promise<TransactionReceipt> {
-    console.log("transaction hash ", transaction_hash);
     const res = await axios.get<TransactionReceipt>(
         `${BACKEND_BASE_URL}/transaction/info/${transaction_hash}`
     );

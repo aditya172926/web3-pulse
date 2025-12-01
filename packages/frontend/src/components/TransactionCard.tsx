@@ -26,14 +26,14 @@ interface Props {
           </div>
         </div>
   
-        <div className="mt-2 text-xs text-gray-700 font-medium">
+        <div className="mt-2 text-sm text-gray-700 font-medium">
           Category: {tx.category}
         </div>
   
-        <div className="text-xs text-gray-400 mt-1 break-all">
+        <div className="text-sm text-gray-600 mt-1 break-all">
           Hash: {tx.hash}
         </div>
-        <div className="text-xs text-gray-400 break-all">
+        <div className="text-sm text-gray-600 break-all">
           From: {tx.from} → To: {tx.to}
         </div>
       </div>

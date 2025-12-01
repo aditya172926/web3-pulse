@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { TransactionSummary } from './transactions.dto';
+import { PaginationDto, TransactionSummary } from './transactions.dto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { TRANSACTION_CATEGORIES } from 'src/configs/constants';
@@ -10,7 +10,12 @@ export class TransactionsService {
         private readonly httpService: HttpService
     ) {}
 
-    async fetch_user_transactions(address: string) {
+    async fetch_user_transactions(
+        address: string,
+        transaction_direction: number,
+        pagination: PaginationDto
+    ) {
+        const {pageKey, limit} = pagination;
         const alchemy_api = `${process.env.ALCHEMY_BASE_URL}/${process.env.ALCHEMY_API_KEY}`;
 
         const base_payload = {
@@ -18,43 +23,34 @@ export class TransactionsService {
                 method: "alchemy_getAssetTransfers",
             };
 
-        const inbound_payload = {
+        let payload = {
             id: 1,
             params: {
-                toAddress: address,
                 excludeZeroValue: false,
                 category: TRANSACTION_CATEGORIES,
                 contractAddresses: [],
-                withMetadata: true
+                withMetadata: true,
+                order: 'desc',
+                maxCount: `0x${limit.toString(16)}`,
+                pageKey: `0x${pageKey.toString(16)}`
             },
             ...base_payload
         };
 
-        const outbound_payload = {
-            id: 2,
-            params: {
-                fromAddress: address,
-                excludeZeroValue: false,
-                category: TRANSACTION_CATEGORIES,
-                contractAddresses: [],
-                withMetadata: true
-            },
-            ...base_payload
-        };
-
-        const batch_payload = [
-            inbound_payload,
-            outbound_payload
-        ];
+        if (transaction_direction == 0) {
+            // inbound transactions
+            payload.params['toAddress'] = address;
+        } else {
+            // outbound transactions
+            payload.params['fromAddress'] = address;
+        }
 
         try {
-            const response = this.httpService.post(alchemy_api, batch_payload);
+            const response = this.httpService.post(alchemy_api, payload);
             const {data} = await firstValueFrom(response);
-            const incoming_transactions = data[0]?.result.transfers ?? [];
-            const outgoing_transactions = data[1]?.result.transfers ?? [];
+            const transactions = data?.result.transfers ?? [];
 
-            const all_transactions = [...incoming_transactions, ...outgoing_transactions];
-            return all_transactions;
+            return transactions;
         } catch (error) {
             throw new HttpException(
                 {

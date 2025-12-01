@@ -1,7 +1,8 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { EvmaddressPipe } from 'src/pipes/evmaddress/evmaddress.pipe';
 import { TransactionHashPipe } from 'src/pipes/transaction_hash/transaction_hash.pipe';
+import { PaginationDto } from './transactions.dto';
 
 @Controller('transaction')
 export class TransactionsController {
@@ -10,9 +11,13 @@ export class TransactionsController {
         private transactionService: TransactionsService
     ) {}
 
-    @Get('history/:address')
-    async fetch_transactions(@Param('address', EvmaddressPipe) address: string) {
-        return await this.transactionService.fetch_user_transactions(address);
+    @Get('history/:direction/:address')
+    async fetch_transactions(
+        @Param('direction') txn_direction: number,
+        @Param('address', EvmaddressPipe) address: string,
+        @Query() query: PaginationDto
+    ) {
+        return await this.transactionService.fetch_user_transactions(address, txn_direction, query);
     }
 
     @Get('info/:transaction_hash')

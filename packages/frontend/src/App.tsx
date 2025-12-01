@@ -99,7 +99,7 @@ function App() {
 
       <AddressInput onSubmit={setAddress} />
 
-      {address && <DashboardTabs address={address} />}
+      <DashboardTabs address={address} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { BalanceService } from './balance.service';
 import { EvmaddressPipe } from 'src/pipes/evmaddress/evmaddress.pipe';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('balance')
 export class BalanceController {

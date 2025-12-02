@@ -3,6 +3,7 @@ import { Transaction, TransactionReceiptResult } from "../interfaces";
 export function TransactionDetailsModal({
     open,
     onClose,
+    txn_data,
     receipt,
 }: {
     open: boolean;
@@ -35,6 +36,15 @@ export function TransactionDetailsModal({
                         <p><strong>Gas Used:</strong> {parseInt(receipt.gasUsed, 16)}</p>
                         <p><strong>Gas Price:</strong> {parseInt(receipt.effectiveGasPrice, 16)} wei</p>
                         <p><strong>Cumulative Gas Used:</strong> {parseInt(receipt.cumulativeGasUsed, 16)}</p>
+                        {txn_data && (
+                            <div>
+                                <p><strong>Value:</strong> {txn_data.value} {txn_data.asset}</p>
+                                <p><strong>Transaction Type:</strong> {txn_data.category}</p>
+                                <p><strong>ERC 721 token id:</strong> {txn_data.erc721_token_id}</p>
+                                <p><strong>Token id:</strong> {txn_data.token_id}</p>
+                            </div>
+
+                        )}
                     </div>
                 )}
 

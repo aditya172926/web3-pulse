@@ -57,15 +57,15 @@ export class TransactionsService {
             const transactions: TransactionData[] = raw_transactions.map((tx) => ({
                 from: tx.from,
                 to: tx.to,
-                value: tx.value.toString(),
-                transaction_hash: tx.hash,
-                block_number: tx.blockNum,
+                value: tx?.value ? tx?.value.toString() : "0",
+                transaction_hash: tx?.hash,
+                block_number: tx?.blockNum,
                 block_timestamp: tx.metadata?.blockTimestamp,
-                category: tx.category,
-                asset: tx.asset,
-                erc721_token_id: tx.erc721TokenId,
-                erc1155_metadata: tx.erc1155Metadata,
-                token_id: tx.tokenId,
+                category: tx?.category,
+                asset: tx?.asset,
+                erc721_token_id: tx?.erc721TokenId,
+                erc1155_metadata: tx?.erc1155Metadata,
+                token_id: tx?.tokenId,
             }));
 
             const pageKey = data?.result.pageKey;
@@ -90,7 +90,6 @@ export class TransactionsService {
 
         const cached_transaction_receipt = await this.cacheManager.get(transaction_hash);
         if (cached_transaction_receipt) {
-            console.log("Returning transaction receipt from cache");
             return cached_transaction_receipt;
         }
 

@@ -1,3 +1,13 @@
+# Submission details
+- Frontend url (Vercel): https://safe-code-challenge-fullstack-front.vercel.app
+- Backend url (Render): https://safe-code-challenge-fullstack.onrender.com
+
+> Note: The backend is hosted on Render. The current free instance spins down with some inactivity. Due to this it might take a minute to come back up. (as noted on the render's website)
+
+#### [Decision making doc is here](./DECISIONS.md)
+
+### Demo
+
 # Ethereum Transaction History Viewer - Take-Home Challenge
 
 Build a transaction history viewer that displays Ethereum transaction history for any given address.

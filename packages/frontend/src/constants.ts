@@ -1,1 +1,1 @@
-export const BACKEND_BASE_URL = 'https://safe-code-challenge-fullstack.onrender.com';
+export const BACKEND_BASE_URL = 'https://safe-code-challenge-fullstack-production.up.railway.app';

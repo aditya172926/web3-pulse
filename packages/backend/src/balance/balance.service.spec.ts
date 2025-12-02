@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TransactionsService } from './transactions.service';
+import { BalanceService } from './balance.service';
 import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
-describe('TransactionsService', () => {
-  let service: TransactionsService;
+describe('Balance', () => {
+  let provider: BalanceService;
 
   const mockHttpService = {
     post: jest.fn(),
@@ -18,16 +18,16 @@ describe('TransactionsService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        TransactionsService,
+        BalanceService,
         { provide: HttpService, useValue: mockHttpService },
         { provide: CACHE_MANAGER, useValue: mockCacheManager },
       ],
     }).compile();
 
-    service = module.get<TransactionsService>(TransactionsService);
+    provider = module.get<BalanceService>(BalanceService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(provider).toBeDefined();
   });
 });

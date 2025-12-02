@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { PaginationDto, TransactionData, TransactionHistoryResult, TransactionReceiptResult } from './transactions.dto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
@@ -9,9 +9,11 @@ import { TransactionDirection } from 'src/configs/enums';
 
 @Injectable()
 export class TransactionsService {
+    private readonly logger = new Logger(TransactionsService.name);
+
     constructor(
         private readonly httpService: HttpService,
-        @Inject(CACHE_MANAGER) private cacheManager: Cache
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
     ) {}
 
     async fetch_user_transactions(
@@ -57,15 +59,15 @@ export class TransactionsService {
             const transactions: TransactionData[] = raw_transactions.map((tx) => ({
                 from: tx.from,
                 to: tx.to,
-                value: tx.value.toString(),
-                transaction_hash: tx.hash,
-                block_number: tx.blockNum,
+                value: tx?.value ? tx?.value.toString() : "0",
+                transaction_hash: tx?.hash,
+                block_number: tx?.blockNum,
                 block_timestamp: tx.metadata?.blockTimestamp,
-                category: tx.category,
-                asset: tx.asset,
-                erc721_token_id: tx.erc721TokenId,
-                erc1155_metadata: tx.erc1155Metadata,
-                token_id: tx.tokenId,
+                category: tx?.category,
+                asset: tx?.asset,
+                erc721_token_id: tx?.erc721TokenId,
+                erc1155_metadata: tx?.erc1155Metadata,
+                token_id: tx?.tokenId,
             }));
 
             const pageKey = data?.result.pageKey;
@@ -73,8 +75,10 @@ export class TransactionsService {
                 transactions,
                 pageKey
             }
+            this.logger.log(`Returning user transaction history with address ${address}`);
             return txn_result;
         } catch (error) {
+            this.logger.error(`Error in fetching transaction history ${error}`);
             throw new HttpException(
                 {
                     message: "Failed to fetch address historical transactions",
@@ -90,7 +94,6 @@ export class TransactionsService {
 
         const cached_transaction_receipt = await this.cacheManager.get(transaction_hash);
         if (cached_transaction_receipt) {
-            console.log("Returning transaction receipt from cache");
             return cached_transaction_receipt;
         }
 
@@ -108,8 +111,10 @@ export class TransactionsService {
             let {data} = await firstValueFrom(response);
             const result: TransactionReceiptResult = data.result;
             await this.cacheManager.set(transaction_hash, result, CACHE_TRANSACTION_RECEIPTS_TIME);
+            this.logger.log(`Returning transaction data for transaction hash ${transaction_hash}`);
             return result;
         } catch (error) {
+            this.logger.error(`Error in fetching transaction receipt data with transaction hash ${transaction_hash}, error: ${error}`);
             throw new HttpException(
                 {
                     message: "Failed to fetch transaction receipt for transaction hash",

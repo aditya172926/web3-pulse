@@ -8,6 +8,10 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '@nestjs/cache-manager';
 import { BalanceModule } from './balance/balance.module';
+import { BalanceService } from './balance/balance.service';
+import { BalanceController } from './balance/balance.controller';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -15,11 +19,31 @@ import { BalanceModule } from './balance/balance.module';
       isGlobal: true,
     }),
     TransactionsModule,
-    HttpModule,
+    HttpModule.register(
+      {
+        timeout: 15000 // 15 secs
+      }
+    ),
     CacheModule.register(),
-    BalanceModule
+    BalanceModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000,
+          limit: 10,
+        },
+      ],
+    }),
   ],
-  controllers: [AppController, TransactionsController],
-  providers: [AppService, TransactionsService],
+  controllers: [AppController, TransactionsController, BalanceController],
+  providers: [
+    AppService, 
+    TransactionsService, 
+    BalanceService, 
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 # Submission details
-- Frontend url (Vercel): https://safe-code-challenge-fullstack-front.vercel.app
+- Frontend url (Vercel): https://act-explorer.vercel.app/
 - Backend url (Railway): https://safe-code-challenge-fullstack-production.up.railway.app
 
 > Note: The backend is hosted on Render. The current free instance spins down with some inactivity. Due to this it might take a minute to come back up. (as noted on the render's website)

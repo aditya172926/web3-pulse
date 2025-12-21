@@ -18,7 +18,7 @@ export default function AddressInput({ onSubmit }: Props) {
     <form onSubmit={handleSubmit} className="mb-4 flex">
       <input
         type="text"
-        className="border p-2 flex-1 rounded"
+        className="border p-2 flex-1 rounded-full"
         placeholder="Enter Ethereum address"
         value={value}
         onChange={(e) => setValue(e.target.value)}

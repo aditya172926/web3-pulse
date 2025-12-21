@@ -11,7 +11,6 @@ export default function AddressInput({ onSubmit }: Props) {
     e.preventDefault();
     if (value) {
       onSubmit(value.trim());
-      setValue(''); // optionally clear input
     }
   };
 

@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import AddressInput from './components/AddressInput';
+import { useEffect } from 'react';
 import DashboardTabs from './components/DashboardTabs';
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -11,8 +10,7 @@ import Sidebar from './components/Sidebar';
 
 
 function App() {
-  // const [address, setAddress] = useState('');
-  const zustand_address = useSelectedAddress((state) => state.address);
+  const address = useSelectedAddress((state) => state.address);
   const updateSelectedAddress = useSelectedAddress((state) => state.updateSelectedAddress)
   const { address: connectedAddress, isConnected } = useAccount();
 
@@ -21,18 +19,17 @@ function App() {
   useEffect(() => {
     if (isConnected && connectedAddress) {
       updateSelectedAddress(connectedAddress);
-      console.log("zustand address ", zustand_address);
     }
   }, [isConnected, connectedAddress]);
 
   return (
-    <div className="mx-auto p-6">
+    <div>
       <div className='flex'>
-        <div className='flex-1 px-3'>
+        <div className='flex-1 p-2 bg-slate-900 text-white'>
           <Sidebar />
         </div>
-        <div className='flex-3'>
-          <DashboardTabs address={zustand_address} />
+        <div className='flex-3 px-2 bg-slate-50'>
+          <DashboardTabs address={address} />
         </div>
       </div>
     </div>

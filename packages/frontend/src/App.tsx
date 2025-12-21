@@ -6,7 +6,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { useAccount } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useSelectedAddress } from './state';
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/sidebar_panel/Sidebar';
 
 
 function App() {

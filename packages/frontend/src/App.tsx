@@ -21,13 +21,15 @@ function App() {
   }, [isConnected, connectedAddress]);
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
-        <ConnectButton />
+    <div className="mx-auto p-6">
+      <div className='flex'>
+        <div className='flex-1 px-3'>
+          <AddressInput onSubmit={setAddress} />
+        </div>
+        <div className='flex-3'>
+          <DashboardTabs address={address} />
+        </div>
       </div>
-      <AddressInput onSubmit={setAddress} />
-
-      <DashboardTabs address={address} />
     </div>
   );
 }

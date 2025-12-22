@@ -1,16 +1,18 @@
 import AddressInput from "../AddressInput";
 import { useSelectedAddress } from "../../state";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-
+import { NavLink } from "react-router";
 
 export default function Sidebar() {
     const updateSelectedAddress = useSelectedAddress((state) => state.updateSelectedAddress);
     const sidebarNavBtns = [
         {
             name: "Transactions",
+            navLink: "/"
         },
         {
-            name: "Portfolio"
+            name: "Portfolio",
+            navLink: "/portfolio"
         }
     ];
 
@@ -27,7 +29,9 @@ export default function Sidebar() {
                         key={index}
                         className="text-slate-500 hover:text-white"
                     >
-                        {btn.name}
+                        <NavLink to={btn.navLink} end>
+                            {btn.name}
+                        </NavLink>
                     </button>
                 ))}
             </div>

@@ -7,10 +7,10 @@ export default function Portfolio() {
     return (
         <div>
             <div className='flex h-screen'>
-                <div className='flex-1 p-2 bg-slate-900 text-white'>
+                <div className='flex-1 p-2 bg-stone-300'>
                     <Sidebar />
                 </div>
-                <div className='flex-3 px-2 bg-slate-50 overflow-y-auto'>
+                <div className='flex-3 px-2 bg-stone-100 overflow-y-auto'>
                     <PortfolioGrid address={address} />
                 </div>
             </div>

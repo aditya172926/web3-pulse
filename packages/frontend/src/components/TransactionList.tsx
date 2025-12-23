@@ -36,12 +36,10 @@ export default function TransactionList({ address, txnDirection }: Props) {
     }
   };
 
-
   useEffect(() => {
     if (!address) return;
     fetchData(true);
   }, [address, txnDirection]);
-
 
   const openModal = async (txn: Transaction) => {
     setSelectedTxn(txn);
@@ -74,9 +72,21 @@ export default function TransactionList({ address, txnDirection }: Props) {
       )}
       {!loading && transactions.length === 0 && <p>No transactions found.</p>}
 
-      {transactions.map(tx => (
-        <TransactionCard key={tx.transaction_hash} tx={tx} type={txnDirection === 0 ? 'inbound' : 'outbound'} onClick={openModal} />
-      ))}
+      <div className='grid h-full grid-rows-[auto_1fr]'>
+        <div className='grid grid-cols-6 gap-4'>
+          <div>Hash</div>
+          <div>Direction</div>
+          <div>From</div>
+          <div>To</div>
+          <div>Category</div>
+          <div>Block</div>
+        </div>
+        <div className="grid grid-cols-1">
+          {transactions.map((tx, index) => (
+            <TransactionCard key={index} tx={tx} type={txnDirection === 0 ? 'inbound' : 'outbound'} onClick={openModal} />
+          ))}
+        </div>
+      </div>
 
       <div className="flex flex-col items-center justify-center py-10">
         <button

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import TransactionList from './TransactionList';
-import PortfolioGrid from './PortfolioGrid';
 
 interface Props {
   address: string;

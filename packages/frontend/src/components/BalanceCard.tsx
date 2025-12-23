@@ -1,4 +1,3 @@
-import { format_slice } from "../helper"
 import { BalanceData } from "../services/portfolio"
 
 interface Props {

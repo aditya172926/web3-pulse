@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getBalances, BalanceData } from '../services/portfolio';
 import BalanceCard from './BalanceCard';
+import { useOutletContext } from 'react-router';
 
-interface Props {
+type Props = {
     address: string;
 }
 
-export default function PortfolioGrid({ address }: Props) {
+export default function PortfolioGrid() {
+    const {address} = useOutletContext<Props>();
     const [balances, setBalances] = useState<BalanceData[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

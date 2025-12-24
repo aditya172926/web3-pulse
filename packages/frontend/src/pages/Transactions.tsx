@@ -1,4 +1,4 @@
-import DashboardTabs from "../components/DashboardTabs";
+import { Outlet } from "react-router";
 import Sidebar from "../components/sidebar_panel/Sidebar";
 import { useSelectedAddress } from "../state";
 
@@ -12,7 +12,7 @@ export default function Transactions() {
                     <Sidebar />
                 </div>
                 <div className='flex-3 px-2 bg-stone-100 overflow-y-auto'>
-                    <DashboardTabs address={address} />
+                    <Outlet context={{address}} />
                 </div>
             </div>
         </div>

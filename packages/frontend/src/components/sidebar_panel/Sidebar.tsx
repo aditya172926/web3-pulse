@@ -4,6 +4,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { NavLink } from "react-router";
 
 export default function Sidebar() {
+    const address = useSelectedAddress((state) => state.address);
     const updateSelectedAddress = useSelectedAddress((state) => state.updateSelectedAddress);
     const sidebarNavBtns = [
         {
@@ -17,10 +18,14 @@ export default function Sidebar() {
     ];
 
     return (
-        <div className="grid h-full grid-rows-[auto_1fr_auto] gap-4">
+        <div className="grid h-full grid-rows-[auto_2fr_1fr_auto] gap-4">
             {/* Top */}
             <div>
                 <AddressInput onSubmit={updateSelectedAddress} />
+            </div>
+
+            <div className="text-sm">
+                <p>{address}</p>
             </div>
 
             <div className="flex flex-col">

@@ -1,15 +1,21 @@
-import {createBrowserRouter} from "react-router";
+import { createBrowserRouter } from "react-router";
 import App from "./App";
+import DashboardTabs from "./components/DashboardTabs";
+import PortfolioGrid from "./components/PortfolioGrid";
 import Transactions from "./pages/Transactions";
-import Portfolio from "./pages/Portfolio";
 
 export const router = createBrowserRouter([
     {
         path: "/",
         Component: App,
         children: [
-            {index: true, Component: Transactions},
-            {path: "portfolio", Component: Portfolio}
+            {
+                Component: Transactions,
+                children: [
+                    { index: true, Component: DashboardTabs },
+                    { path: "portfolio", Component: PortfolioGrid }
+                ]
+            }
         ]
     }
 ])

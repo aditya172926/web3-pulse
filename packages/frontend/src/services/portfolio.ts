@@ -1,12 +1,13 @@
 import axios from 'axios';
-import { BACKEND_BASE_URL } from '../constants';
 
 export interface BalanceData {
   token_contract_address: string;
   balance: string;
 }
 
+const backend_api_url = import.meta.env.VITE_BACKEND_API_URL;
+
 export async function getBalances(address: string): Promise<BalanceData[]> {
-  const res = await axios.get<BalanceData[]>(`${BACKEND_BASE_URL}/balance/${address}`);
+  const res = await axios.get<BalanceData[]>(`${backend_api_url}/balance/${address}`);
   return res.data;
 }

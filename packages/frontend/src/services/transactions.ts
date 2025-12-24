@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { BACKEND_BASE_URL } from '../constants';
 import { GetTransactionsParams, TransactionReceiptResult, TransactionResponse } from '../interfaces';
 
 export async function getTransactions(
@@ -7,7 +6,7 @@ export async function getTransactions(
     { txnDirection, limit = 20, pageKey = "0x0" }: GetTransactionsParams
 ): Promise<TransactionResponse> {
     const res = await axios.get<TransactionResponse>(
-        `${BACKEND_BASE_URL}/transaction/history/${txnDirection}/${address}`,
+        `${import.meta.env.VITE_BACKEND_API_URL}/transaction/history/${txnDirection}/${address}`,
         {
             params: {
                 limit,
@@ -20,7 +19,7 @@ export async function getTransactions(
 
 export async function getTransactionReceipt(transaction_hash: string): Promise<TransactionReceiptResult> {
     const res = await axios.get<TransactionReceiptResult>(
-        `${BACKEND_BASE_URL}/transaction/info/${transaction_hash}`
+        `${import.meta.env.VITE_BACKEND_API_URL}/transaction/info/${transaction_hash}`
     );
     return res.data;
 }

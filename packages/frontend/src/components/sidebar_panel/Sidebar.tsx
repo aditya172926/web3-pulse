@@ -8,11 +8,18 @@ import AccountCard from './AccountCard';
 import SidebarBalanceCard from './SidebarBalanceCard';
 import SidebarTransactionCard from './SidebarTransactionCard';
 
+interface AccountData {
+    balance: string,
+    blockNumber: string,
+    isContract: boolean,
+    transactionCount: number
+}
+
 export default function Sidebar() {
     const providerClient = useOnChainClient((state) => state.providerClient);
     const address = useSelectedAddress((state) => state.address);
     const updateSelectedAddress = useSelectedAddress((state) => state.updateSelectedAddress);
-    const [accountData, setAccountData] = useState(null);
+    const [accountData, setAccountData] = useState<AccountData | null>(null);
     const sidebarNavBtns = [
         {
             name: "Transactions",
@@ -27,9 +34,9 @@ export default function Sidebar() {
     async function getData() {
         try {
             const blockNumber = await providerClient.getBlockNumber();
-            const balance = formatEther(await providerClient.getBalance({address}));
-            const isContract = await providerClient.getCode({ address: address });
-            const transactionCount = await providerClient.getTransactionCount({address});
+            const balance = formatEther(await providerClient.getBalance({address: address as `0x${string}`}));
+            const isContract = await providerClient.getCode({ address: address as `0x${string}` });
+            const transactionCount = await providerClient.getTransactionCount({address: address as `0x${string}`});
             setAccountData(
                 {
                     balance: balance.toString(),
@@ -68,9 +75,9 @@ export default function Sidebar() {
                 {sidebarNavBtns.map((btn, index) => (
                     <button
                         key={index}
-                        className="text-slate-500 hover:text-white"
+                        className="hover:text-white"
                     >
-                        <NavLink key={index} to={btn.navLink} end className={({ isActive }) => isActive && "text-white"}>
+                        <NavLink key={index} to={btn.navLink} end className={({ isActive }) => isActive ? "text-white" : "text-slate-500" }>
                             {btn.name}
                         </NavLink>
                     </button>

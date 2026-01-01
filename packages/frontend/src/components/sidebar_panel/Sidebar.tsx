@@ -1,6 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useEffect, useState } from 'react';
-import { NavLink } from "react-router";
 import { formatEther } from 'viem';
 import { useOnChainClient, useSelectedAddress } from "../../state";
 import AddressInput from "../AddressInput";
@@ -21,16 +20,6 @@ export default function Sidebar() {
     const address = useSelectedAddress((state) => state.address);
     const updateSelectedAddress = useSelectedAddress((state) => state.updateSelectedAddress);
     const [accountData, setAccountData] = useState<AccountData | null>(null);
-    const sidebarNavBtns = [
-        {
-            name: "Transactions",
-            navLink: "/"
-        },
-        {
-            name: "Portfolio",
-            navLink: "/portfolio"
-        }
-    ];
 
     async function getData() {
         try {
@@ -59,7 +48,7 @@ export default function Sidebar() {
     }, [address]);
 
     return (
-        <div className="grid h-full grid-rows-[auto_minmax(0,3fr)_1fr_auto] gap-4">
+        <div className="grid h-full grid-rows-[auto_1fr_auto] gap-4">
             {/* Top */}
             <div>
                 <AddressInput onSubmit={updateSelectedAddress} />
@@ -71,20 +60,6 @@ export default function Sidebar() {
                     <SidebarBalanceCard balance={accountData?.balance} blockNumber={accountData?.blockNumber} />
                     <ChainCard chainId={accountData?.chainId} gasPrice={accountData?.gasPrice} />
                 </div>
-            </div>
-
-
-            <div className="flex flex-col">
-                {sidebarNavBtns.map((btn, index) => (
-                    <button
-                        key={index}
-                        className="hover:text-white"
-                    >
-                        <NavLink key={index} to={btn.navLink} end className={({ isActive }) => isActive ? "text-white" : "text-slate-500" }>
-                            {btn.name}
-                        </NavLink>
-                    </button>
-                ))}
             </div>
 
             <div className="flex justify-center text-slate-400">

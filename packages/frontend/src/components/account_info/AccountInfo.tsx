@@ -43,7 +43,7 @@ export default function AccountInfo() {
             </div>
 
             {/* Key Metrics */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-4">
                 <MetricCard
                     icon={
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
@@ -68,33 +68,11 @@ export default function AccountInfo() {
 
             {/* Main Content */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Column - Charts */}
                 <div className="lg:col-span-3 space-y-6">
-                    {/* Activity Heatmap */}
                     <ContentCard title="Transactions">
                         <DashboardTabs address={address} />
                     </ContentCard>
                 </div>
-
-                {/* Right Column - Security & Approvals */}
-                {/* <div className="space-y-6">
-                    <ContentCard title="Token Approvals">
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
-                                <div className="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
-                                        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                                    </svg>
-                                    <span className="text-sm font-medium text-red-700">High Risk</span>
-                                </div>
-                                <span className="text-lg font-bold text-red-700">3</span>
-                            </div>
-                            <button className="w-full mt-4 px-4 py-2.5 bg-stone-800 hover:bg-stone-700 text-white rounded-lg transition-colors font-medium">
-                                Manage Approvals
-                            </button>
-                        </div>
-                    </ContentCard>
-                </div> */}
             </div>
         </div>
     );

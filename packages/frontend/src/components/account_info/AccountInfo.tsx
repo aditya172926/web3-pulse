@@ -51,7 +51,7 @@ export default function AccountInfo() {
                         </svg>
                     }
                     label="Total Transactions"
-                    value={accountInfoData?.totalTransactions}
+                    value={accountInfoData?.totalTransactions.toString()}
                     color="blue"
                 />
                 <MetricCard
@@ -103,7 +103,7 @@ export default function AccountInfo() {
 interface MetricCardProps {
     icon: ReactElement,
     label: string,
-    value: string,
+    value?: string,
     color: string
 }
 

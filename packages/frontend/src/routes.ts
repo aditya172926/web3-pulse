@@ -1,9 +1,8 @@
 import { createBrowserRouter } from "react-router";
 import App from "./App";
-import DashboardTabs from "./components/DashboardTabs";
+import AccountInfo from "./components/account_info/AccountInfo";
 import PortfolioGrid from "./components/PortfolioGrid";
 import Transactions from "./pages/Transactions";
-import AccountInfo from "./components/account_info/AccountInfo";
 
 export const router = createBrowserRouter([
     {

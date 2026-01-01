@@ -1,6 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useEffect, useState } from 'react';
-import { NavLink } from "react-router";
 import { formatEther } from 'viem';
 import { useOnChainClient, useSelectedAddress } from "../../state";
 import AddressInput from "../AddressInput";

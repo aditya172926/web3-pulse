@@ -1,9 +1,9 @@
-import { NavLink, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { TRANSACTION_BADGE_COLOR } from "../constants";
 import { format_slice } from "../helper";
 import { Transaction } from "../interfaces";
-import Badge from "./Badge";
 import { useSelectedTransaction } from "../state";
+import Badge from "./Badge";
 
 interface Props {
   tx: Transaction;

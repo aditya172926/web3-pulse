@@ -14,7 +14,9 @@ export interface BalanceResponse {
 export interface BalanceInfo {
     address: string,
     network: string,
+    tokenAddress: string,
     tokenBalance: string,
+    balanceUsd?: string,
     tokenMetadata: TokenMetadata,
     tokenPrices: TokenPrices[]
 }

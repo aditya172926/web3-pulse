@@ -54,6 +54,11 @@ export class BalanceService {
         };
         balances.tokens.map((balance, index) => {
             const balance_int = this.hexToDecimalString(balance.tokenBalance, Number(balance.tokenMetadata.decimals));
+            if (balance.tokenAddress) {
+                balance.balanceUsd = (Number(balance_int) * Number(balance.tokenPrices.map((tokenPrice) => {if (tokenPrice.currency.toLowerCase() === "usd") {
+                    return tokenPrice.value
+                }}))).toString();
+            }
             balance.tokenBalance = balance_int;
         });
         await this.cacheManager.set(`${BALANCE_CACHE_PREFIX}${address}`, balances, CACHE_BALANCE_TIME);

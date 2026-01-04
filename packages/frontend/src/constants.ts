@@ -1,4 +1,3 @@
-import { ReactElement } from "react";
 
 // Badge Colors
 export const TRANSACTION_BADGE_COLOR: Record<string, string> = {

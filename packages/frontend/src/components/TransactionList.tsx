@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getTransactionReceipt, getTransactions } from '../services/transactions';
 import TransactionCard from './TransactionCard';
-import { TransactionDetailsModal } from './TransactionDetailsModal';
 import { Transaction, TransactionReceiptResult } from '../interfaces';
 import { TRANSACTION_CATEGORIES } from '../constants';
 
@@ -112,12 +111,12 @@ export default function TransactionList({ address, txnDirection, categoryIndex }
                 </button>
               </div>
 
-              <TransactionDetailsModal
+              {/* <TransactionDetailsModal
                 open={modalOpen}
                 onClose={closeModal}
                 txn_data={selectedTxn}
                 receipt={receipt}
-              />
+              /> */}
             </>
           )}
         </>

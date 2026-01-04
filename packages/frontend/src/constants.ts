@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 // Badge Colors
 export const TRANSACTION_BADGE_COLOR: Record<string, string> = {
     'external': 'bg-red-600',

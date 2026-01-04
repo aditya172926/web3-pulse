@@ -14,7 +14,6 @@ export const router = createBrowserRouter([
                 children: [
                     { index: true, Component: AccountInfo },
                     { path: "portfolio", Component: PortfolioGrid },
-                    { path: "accountInfo", Component: AccountInfo }
                 ]
             }
         ]

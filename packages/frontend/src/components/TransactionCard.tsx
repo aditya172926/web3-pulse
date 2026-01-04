@@ -1,22 +1,29 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { TRANSACTION_BADGE_COLOR } from "../constants";
 import { format_slice } from "../helper";
 import { Transaction } from "../interfaces";
 import Badge from "./Badge";
+import { useSelectedTransaction } from "../state";
 
 interface Props {
   tx: Transaction;
   type: 'inbound' | 'outbound';
-  onClick: (tx: Transaction) => void;
 }
 
-export default function TransactionCard({ tx, type, onClick }: Props) {
+export default function TransactionCard({ tx, type }: Props) {
   const isInbound = type === 'inbound';
+  const navigate = useNavigate();
+  const setSelectedTransaction = useSelectedTransaction((state) => state.setTransaction);
+
+  function navigateToTxnDetails(tx: Transaction) {
+    setSelectedTransaction(tx);
+    navigate(`transaction/${tx.transaction_hash}`);
+  }
 
   return (
     <div
       className="grid grid-cols-6 gap-4 py-3 pl-1 cursor-pointer hover:shadow-md transition"
-      onClick={() => onClick(tx)}
+      onClick={() => navigateToTxnDetails(tx)}
     >
       <div className="text-sm text-gray-600 break-all">
         {format_slice(tx.transaction_hash)}

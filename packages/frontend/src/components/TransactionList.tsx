@@ -14,9 +14,9 @@ export default function TransactionList({ address, txnDirection, categoryIndex }
   const [loading, setLoading] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<Record<string, Transaction[]>>({});
   const [error, setError] = useState('');
-  const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(null);
-  const [receipt, setReceipt] = useState<TransactionReceiptResult | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(null);
+  // const [receipt, setReceipt] = useState<TransactionReceiptResult | null>(null);
+  // const [modalOpen, setModalOpen] = useState(false);
   const [pageKey, setPageKey] = useState<string | null>('0x0');
 
   const fetchData = async (reset = true) => {
@@ -53,20 +53,20 @@ export default function TransactionList({ address, txnDirection, categoryIndex }
     fetchData(true);
   }, [address, txnDirection]);
 
-  const openModal = async (txn: Transaction) => {
-    setSelectedTxn(txn);
-    setModalOpen(true);
+  // const openTransactionDetails = async (txn: Transaction) => {
+  //   setSelectedTxn(txn);
+  //   setModalOpen(true);
 
-    // Fetch receipt
-    const data = await getTransactionReceipt(txn.transaction_hash);
-    setReceipt(data);
-  };
+  //   // Fetch receipt
+  //   const data = await getTransactionReceipt(txn.transaction_hash);
+  //   setReceipt(data);
+  // };
 
-  const closeModal = () => {
-    setModalOpen(false);
-    setSelectedTxn(null);
-    setReceipt(null);
-  };
+  // const closeModal = () => {
+  //   setModalOpen(false);
+  //   setSelectedTxn(null);
+  //   setReceipt(null);
+  // };
 
   return (
     <div>
@@ -96,7 +96,7 @@ export default function TransactionList({ address, txnDirection, categoryIndex }
                 </div>
                 <div className="grid grid-cols-1">
                   {transactions[TRANSACTION_CATEGORIES[categoryIndex]].map((tx, index) => (
-                    <TransactionCard key={index} tx={tx} type={txnDirection === 0 ? 'inbound' : 'outbound'} onClick={openModal} />
+                    <TransactionCard key={index} tx={tx} type={txnDirection === 0 ? 'inbound' : 'outbound'} />
                   ))}
                 </div>
               </div>

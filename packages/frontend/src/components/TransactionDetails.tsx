@@ -1,76 +1,23 @@
-// import { Transaction, TransactionReceiptResult } from "../interfaces";
-
+import { useLoaderData, useNavigate } from "react-router";
 import { Icon } from "../icons";
-import { Transaction, TransactionReceiptResult } from "../interfaces";
+import { TransactionReceiptResult } from "../interfaces";
+import { useSelectedTransaction } from "../state";
 
-// export function TransactionDetailsModal({
-//     open,
-//     onClose,
-//     txn_data,
-//     receipt,
-// }: {
-//     open: boolean;
-//     onClose: () => void;
-//     txn_data: Transaction | null,
-//     receipt: TransactionReceiptResult | null;
-// }) {
-//     return (
-//         <div
-//             className={`fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-//                 }`}
-//             onClick={onClose}
-//         >
-//             <div
-//                 className={`absolute right-0 top-0 h-full w-[50vw] max-w-[700px]  bg-white shadow-lg p-6 transition-transform ${open ? "translate-x-0" : "translate-x-full"
-//                     }`}
-//                 onClick={(e) => e.stopPropagation()}
-//             >
-//                 <h2 className="text-xl font-semibold mb-4">Transaction Details</h2>
+type Props = {
+    receipt: TransactionReceiptResult
+}
 
-//                 {!receipt ? (
-//                     <p className="text-gray-500">Loading...</p>
-//                 ) : (
-//                     <div className="space-y-2 text-sm text-gray-700">
-//                         <p><strong>Hash:</strong> {receipt.transactionHash}</p>
-//                         <p><strong>Status:</strong> {receipt.status === "0x1" ? "Success" : "Failed"}</p>
-//                         <p><strong>Block:</strong> {parseInt(receipt.blockNumber, 16)}</p>
-//                         <p><strong>From:</strong> {receipt.from}</p>
-//                         <p><strong>To:</strong> {receipt.to}</p>
-//                         <p><strong>Gas Used:</strong> {parseInt(receipt.gasUsed, 16)}</p>
-//                         <p><strong>Gas Price:</strong> {parseInt(receipt.effectiveGasPrice, 16)} wei</p>
-//                         <p><strong>Cumulative Gas Used:</strong> {parseInt(receipt.cumulativeGasUsed, 16)}</p>
-//                         {txn_data && (
-//                             <div>
-//                                 <p><strong>Value:</strong> {txn_data.value} {txn_data.asset}</p>
-//                                 <p><strong>Transaction Type:</strong> {txn_data.category}</p>
-//                                 <p><strong>ERC 721 token id:</strong> {txn_data.erc721_token_id}</p>
-//                                 <p><strong>Token id:</strong> {txn_data.token_id}</p>
-//                             </div>
+export default function TransactionDetailsPage() {
+    const txn_data = useSelectedTransaction((state) => state.transaction);
+    const setSelectedTransaction = useSelectedTransaction((state) => state.setTransaction);
+    const { receipt } = useLoaderData<Props>();
+    const navigate = useNavigate();
 
-//                         )}
-//                     </div>
-//                 )}
+    function onBack() {
+        navigate(-1);
+        setSelectedTransaction(null);
+    }
 
-//                 <button
-//                     className="mt-6 w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700"
-//                     onClick={onClose}
-//                 >
-//                     Close
-//                 </button>
-//             </div>
-//         </div>
-//     );
-// }
-
-export default function TransactionDetailsPage({
-    txn_data,
-    receipt,
-    onBack,
-}: {
-    txn_data: Transaction | null;
-    receipt: TransactionReceiptResult | null;
-    onBack: () => void;
-}) {
     if (!txn_data) {
         return (
             <div className="min-h-screen bg-gray-50 p-8">
@@ -137,11 +84,10 @@ export default function TransactionDetailsPage({
                 <div className="space-y-6">
                     {/* Status Banner */}
                     {receipt && (
-                        <div className={`p-6 rounded-xl flex items-center gap-4 shadow-sm ${
-                            isSuccess 
-                                ? 'bg-green-50 border-2 border-green-200' 
+                        <div className={`p-6 rounded-xl flex items-center gap-4 shadow-sm ${isSuccess
+                                ? 'bg-green-50 border-2 border-green-200'
                                 : 'bg-red-50 border-2 border-red-200'
-                        }`}>
+                            }`}>
                             {isSuccess ? (
                                 // <CheckCircle2 className="w-8 h-8 text-green-600 flex-shrink-0" />
                                 <Icon name="checkIcon" />

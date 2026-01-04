@@ -1,6 +1,7 @@
 import { createPublicClient, http, PublicClient } from 'viem';
 import { mainnet } from 'viem/chains';
-import {create} from 'zustand';
+import { create } from 'zustand';
+import { Transaction } from './interfaces';
 
 // -- Address state --
 type SelectedAddressState = {
@@ -11,8 +12,8 @@ type SelectedAddressState = {
 
 export const useSelectedAddress = create<SelectedAddressState>((set) => ({
     address: '',
-    updateSelectedAddress: (newAddress: string) => set({address: newAddress}),
-    resetSelectedAddress: () => set({address: ''})
+    updateSelectedAddress: (newAddress: string) => set({ address: newAddress }),
+    resetSelectedAddress: () => set({ address: '' })
 }))
 
 // -- On Chain Provider --
@@ -26,5 +27,16 @@ export const useOnChainClient = create<OnChainProvider>((set) => ({
         chain: mainnet,
         transport: http()
     }),
-    setPublicClient: (client: PublicClient) => set({providerClient: client})
+    setPublicClient: (client: PublicClient) => set({ providerClient: client })
+}))
+
+// -- Selected Transaction --
+type SelectedTransaction = {
+    transaction: Transaction | null,
+    setTransaction: (txn: Transaction | null) => void
+}
+
+export const useSelectedTransaction = create<SelectedTransaction>((set) => ({
+    transaction: null,
+    setTransaction: (txn: Transaction | null) => set({ transaction: txn })
 }))

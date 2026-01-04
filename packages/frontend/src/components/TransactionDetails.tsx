@@ -2,6 +2,7 @@ import { useLoaderData, useNavigate } from "react-router";
 import { Icon } from "../icons";
 import { TransactionReceiptResult } from "../interfaces";
 import { useSelectedTransaction } from "../state";
+import { formatTimestamp, formatValue, hexToDecimal } from "../helper";
 
 type Props = {
     receipt: TransactionReceiptResult
@@ -26,7 +27,6 @@ export default function TransactionDetailsPage() {
                         onClick={onBack}
                         className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
                     >
-                        {/* <ArrowLeft className="w-5 h-5" /> */}
                         <Icon name="arrowLeft" />
                         <span className="font-medium">Back</span>
                     </button>
@@ -37,20 +37,6 @@ export default function TransactionDetailsPage() {
             </div>
         );
     }
-
-    const formatTimestamp = (timestamp: string) => {
-        const date = new Date(parseInt(timestamp) * 1000);
-        return date.toLocaleString();
-    };
-
-    const hexToDecimal = (hex: string) => {
-        return parseInt(hex, 16).toLocaleString();
-    };
-
-    const formatValue = (value: string) => {
-        const ethValue = parseInt(value) / 1e18;
-        return ethValue.toFixed(6);
-    };
 
     const isSuccess = receipt?.status === '0x1';
 
@@ -64,9 +50,8 @@ export default function TransactionDetailsPage() {
                 {/* Back Button */}
                 <button
                     onClick={onBack}
-                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
+                    className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors group"
                 >
-                    {/* <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> */}
                     <Icon name="arrowLeft" />
                     <span className="font-medium">Back to Transactions</span>
                 </button>
@@ -74,7 +59,6 @@ export default function TransactionDetailsPage() {
                 {/* Page Header */}
                 <div className="mb-8">
                     <div className="flex items-center gap-3 mb-2">
-                        {/* <FileText className="w-8 h-8 text-blue-600" /> */}
                         <Icon name="documentCheck" />
                         <h1 className="text-3xl font-bold text-gray-900">Transaction Details</h1>
                     </div>
@@ -89,10 +73,8 @@ export default function TransactionDetailsPage() {
                                 : 'bg-red-50 border-2 border-red-200'
                             }`}>
                             {isSuccess ? (
-                                // <CheckCircle2 className="w-8 h-8 text-green-600 flex-shrink-0" />
                                 <Icon name="checkIcon" />
                             ) : (
-                                // <XCircle className="w-8 h-8 text-red-600 flex-shrink-0" />
                                 <Icon name="crossIcon" />
                             )}
                             <div>
@@ -109,7 +91,6 @@ export default function TransactionDetailsPage() {
                     {/* Transaction Overview */}
                     <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                         <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                            {/* <ArrowRight className="w-6 h-6 text-blue-600" /> */}
                             <Icon name="arrowRight" />
                             Transaction Overview
                         </h2>
@@ -137,7 +118,6 @@ export default function TransactionDetailsPage() {
                                 </div>
                                 <div>
                                     <label className="text-sm font-medium text-gray-600 block mb-2 flex items-center gap-1">
-                                        {/* <Clock className="w-4 h-4" /> */}
                                         <Icon name="clockIcon" />
                                         Timestamp
                                     </label>
@@ -162,7 +142,6 @@ export default function TransactionDetailsPage() {
                                         className="p-2 hover:bg-gray-200 rounded-lg transition-colors group"
                                         title="Copy address"
                                     >
-                                        {/* <Copy className="w-4 h-4 text-gray-600 group-hover:text-gray-900" /> */}
                                         <Icon name="copyToClipboard" className="size-6 hover:text-gray-900" />
                                     </button>
                                 </div>
@@ -176,7 +155,6 @@ export default function TransactionDetailsPage() {
                                         className="p-2 hover:bg-gray-200 rounded-lg transition-colors group"
                                         title="Copy address"
                                     >
-                                        {/* <Copy className="w-4 h-4 text-gray-600 group-hover:text-gray-900" /> */}
                                         <Icon name="copyToClipboard" className="size-6 hover:text-gray-900" />
                                     </button>
                                 </div>
@@ -191,7 +169,6 @@ export default function TransactionDetailsPage() {
                                             className="p-2 hover:bg-purple-200 rounded-lg transition-colors group"
                                             title="Copy address"
                                         >
-                                            {/* <Copy className="w-4 h-4 text-purple-600 group-hover:text-purple-900" /> */}
                                             <Icon name="copyToClipboard" className="size-6 hover:text-gray-900" />
                                         </button>
                                     </div>
@@ -204,7 +181,6 @@ export default function TransactionDetailsPage() {
                     <div className="grid md:grid-cols-2 gap-6">
                         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                {/* <Hash className="w-5 h-5 text-gray-600" /> */}
                                 <Icon name="hashTag" />
                                 Transaction Hash
                             </h2>
@@ -217,7 +193,6 @@ export default function TransactionDetailsPage() {
                                 onClick={() => copyToClipboard(txn_data.transaction_hash)}
                                 className="mt-3 flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
                             >
-                                {/* <Copy className="w-4 h-4" /> */}
                                 <Icon name="copyToClipboard" className="size-6 hover:text-gray-900" />
                                 Copy Hash
                             </button>
@@ -225,7 +200,6 @@ export default function TransactionDetailsPage() {
 
                         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                {/* <Blocks className="w-5 h-5 text-gray-600" /> */}
                                 <Icon name="cube" />
                                 Block Information
                             </h2>
@@ -260,7 +234,6 @@ export default function TransactionDetailsPage() {
                     {receipt && (
                         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                             <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                {/* <Fuel className="w-6 h-6 text-amber-600" /> */}
                                 <Icon name="fire" />
                                 Gas Information
                             </h2>
@@ -281,7 +254,6 @@ export default function TransactionDetailsPage() {
                                 </div>
                                 <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-5 rounded-xl border border-amber-200">
                                     <label className="text-sm font-medium text-gray-600 mb-2 block flex items-center gap-1">
-                                        {/* <Zap className="w-4 h-4" /> */}
                                         <Icon name="trendUp" />
                                         Gas Price
                                     </label>
@@ -338,7 +310,6 @@ export default function TransactionDetailsPage() {
                                 onClick={() => copyToClipboard(receipt.blockHash)}
                                 className="mt-3 flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
                             >
-                                {/* <Copy className="w-4 h-4" /> */}
                                 <Icon name="copyToClipboard" className="size-6 hover:text-gray-900" />
                                 Copy Hash
                             </button>
@@ -351,7 +322,6 @@ export default function TransactionDetailsPage() {
                             <h2 className="text-xl font-bold text-gray-900 mb-4">Event Logs</h2>
                             <div className="bg-blue-50 p-5 rounded-lg border border-blue-200">
                                 <div className="flex items-center gap-3">
-                                    {/* <FileText className="w-5 h-5 text-blue-600" /> */}
                                     <Icon name="documentCheck" />
                                     <p className="text-base text-gray-700">
                                         <span className="font-bold text-gray-900">{receipt.logs.length}</span> event log{receipt.logs.length !== 1 ? 's' : ''} recorded for this transaction

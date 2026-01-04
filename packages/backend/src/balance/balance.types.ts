@@ -16,6 +16,7 @@ export interface BalanceInfo {
     network: string,
     tokenAddress: string,
     tokenBalance: string,
+    formattedTokenBalance?: string,
     balanceUsd?: string,
     tokenMetadata: TokenMetadata,
     tokenPrices: TokenPrices[]

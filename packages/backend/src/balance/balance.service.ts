@@ -59,7 +59,7 @@ export class BalanceService {
                     return tokenPrice.value
                 }}))).toString();
             }
-            balance.tokenBalance = balance_int;
+            balance.formattedTokenBalance = balance_int;
         });
         await this.cacheManager.set(`${BALANCE_CACHE_PREFIX}${address}`, balances, CACHE_BALANCE_TIME);
         this.logger.log(`Successfully fetched balances for address: ${address}`);

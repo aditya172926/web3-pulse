@@ -16,3 +16,7 @@ export const formatValue = (value: string) => {
     const ethValue = parseInt(value) / 1e18;
     return ethValue.toFixed(6);
 };
+
+export const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+};

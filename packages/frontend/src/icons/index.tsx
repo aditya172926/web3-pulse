@@ -1,3 +1,4 @@
+import { ArrowDiagonalOutIcon } from "./ArrowDiagonalOutIcon";
 import { ArrowLeftIcon } from "./ArrowLeft";
 import { ArrowRightIcon } from "./ArrowRight";
 import { CheckIcon } from "./CheckIcon";
@@ -10,6 +11,7 @@ import { CubeIcon } from "./CubeIcon";
 import { DocumentCheckIcon } from "./DocumentCheck";
 import { FireIcon } from "./FireIcon";
 import { HashTagIcon } from "./HashtagIcon";
+import { SearchIcon } from "./SearchIcon";
 import { TrendUpIcon } from "./TrendUpIcon";
 import { IconProps } from "./types";
 
@@ -26,7 +28,9 @@ export const Icons = {
     fire: FireIcon,
     trendUp: TrendUpIcon,
     circleArrowDown: CircleArrowDownIcon,
-    circleArrowUp: CircleArrowUpIcon
+    circleArrowUp: CircleArrowUpIcon,
+    arrowDiagonalOut: ArrowDiagonalOutIcon,
+    search: SearchIcon
 } as const;
 
 export type IconName = keyof typeof Icons;

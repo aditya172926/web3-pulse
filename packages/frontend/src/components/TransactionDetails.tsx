@@ -2,7 +2,7 @@ import { useLoaderData, useNavigate } from "react-router";
 import { Icon } from "../icons";
 import { TransactionReceiptResult } from "../interfaces";
 import { useSelectedTransaction } from "../state";
-import { formatTimestamp, formatValue, hexToDecimal } from "../helper";
+import { copyToClipboard, formatTimestamp, formatValue, hexToDecimal } from "../helper";
 
 type Props = {
     receipt: TransactionReceiptResult
@@ -39,10 +39,6 @@ export default function TransactionDetailsPage() {
     }
 
     const isSuccess = receipt?.status === '0x1';
-
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
-    };
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">

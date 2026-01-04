@@ -5,13 +5,14 @@ import { Cache } from 'cache-manager';
 import { firstValueFrom } from 'rxjs';
 import { BALANCE_CACHE_PREFIX, CACHE_BALANCE_TIME } from 'src/configs/constants';
 import { AlchemyBalanceRequest, BalanceInfo, BalanceResponse } from './balance.types';
+import { HttpClientService } from 'src/http-client/http-client.service';
 
 @Injectable()
 export class BalanceService {
     private readonly logger = new Logger(BalanceService.name);
 
     constructor(
-        private readonly httpService: HttpService,
+        private readonly httpService: HttpClientService,
         @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) { }
 
@@ -21,20 +22,8 @@ export class BalanceService {
             this.logger.log(`Returning cached balance for address ${address}`);
             return cached_balances;
         }
-
-        try {
-            return this.fetchFromAlchemy(address);
-        } catch (error) {
-            this.logger.error(`Error in fetching balances for address ${address}, error: ${error}`);
-            throw new HttpException(
-                {
-                    message: "Failed to fetch balances for the address",
-                    error: error?.message ?? error.toString(),
-                    address
-                },
-                HttpStatus.BAD_GATEWAY
-            );
-        }
+        this.logger.debug(`Cache miss for address: ${address}, fetching from API`);
+        return this.fetchFromAlchemy(address);
     }
 
     private async fetchFromAlchemy(address: string): Promise<BalanceResponse> {
@@ -49,27 +38,21 @@ export class BalanceService {
             ]
         }
 
-        try {
-            const result = this.httpService.post(alchemy_api, payload, {
-                timeout: 10000,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const { data } = await firstValueFrom(result);
-            // Validate response
-            if (!data?.data?.tokens) {
-                throw new Error('Invalid response structure from Alchemy API');
-            }
-
-            const balances: BalanceResponse = data.data.tokens;
-            await this.cacheManager.set(`${BALANCE_CACHE_PREFIX}${address}`, balances, CACHE_BALANCE_TIME);
-            return balances;
-        } catch (err) {
-            if (err.response) {
-                this.logger.error
-            }
+        const result = this.httpService.post(alchemy_api, payload, {
+            timeoutMs: 10000,
+            retries: 3,
+            retryDelay: 1000
+        });
+        const { data } = await firstValueFrom(result);
+        // Validate response
+        if (!data?.data?.tokens) {
+            throw new Error('Invalid response structure from Alchemy API');
         }
+
+        const balances: BalanceResponse = data.data.tokens;
+        await this.cacheManager.set(`${BALANCE_CACHE_PREFIX}${address}`, balances, CACHE_BALANCE_TIME);
+        this.logger.log(`Successfully fetched balances for address: ${address}`);
+        return balances;
     }
 
     hexToInteger(hex: string): string {

@@ -12,6 +12,7 @@ import { BalanceService } from './balance/balance.service';
 import { BalanceController } from './balance/balance.controller';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { HttpClientModule } from './http-client/http-client.module';
 
 @Module({
   imports: [
@@ -34,16 +35,17 @@ import { APP_GUARD } from '@nestjs/core';
         },
       ],
     }),
+    HttpClientModule,
   ],
   controllers: [AppController, TransactionsController, BalanceController],
   providers: [
-    AppService, 
-    TransactionsService, 
-    BalanceService, 
+    AppService,
+    TransactionsService,
+    BalanceService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

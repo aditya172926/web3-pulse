@@ -4,7 +4,7 @@ export function format_slice(str: string, maxLength: number = 10): string {
 }
 
 export const formatTimestamp = (timestamp: string) => {
-    const date = new Date(parseInt(timestamp) * 1000);
+    const date = new Date(timestamp);
     return date.toLocaleString();
 };
 

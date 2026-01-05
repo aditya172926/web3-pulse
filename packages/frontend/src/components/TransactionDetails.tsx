@@ -10,6 +10,7 @@ type Props = {
 
 export default function TransactionDetailsPage() {
     const txn_data = useSelectedTransaction((state) => state.transaction);
+    console.log("transaction data ", txn_data);
     const setSelectedTransaction = useSelectedTransaction((state) => state.setTransaction);
     const { receipt } = useLoaderData<Props>();
     const navigate = useNavigate();
